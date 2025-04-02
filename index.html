@@ -4,30 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <div>
-        <link rel="stylesheet" href="image/">
-    </div>
     <title>DevAnswers</title>
-
-    
 </head>
 <body>
     <header class="header">
         <div class="navbar">
-            <h1 class="logo">DevAnswers</h1>
+            <div class="container">
+                <img src="" alt="Logo" class="logo-img">
+                <h1 class="logo">DevAnswers</h1>
+            </div>
             <nav class="nav">
-                <a href="#" class="nav-link active">Questions</a>
-                <a href="#" class="nav-link">Tags</a>
+                <a href="index.html" class="nav-link active">home</a>
+                <a href="Tags.html" class="nav-link">Tags</a>
                 <a href="#" class="nav-link">Users</a>
             </nav>
-            <div class="search-box">
-                <input type="text" placeholder="Search questions...">
-                <button></button>
-            </div>
-            <button>Ask Question</button>
         </div>
     </header>
-<footer>
 
-</footer>
+    <main class="main-content">
+        
+        <section class="questions">
+            <div class="search-box">
+                <input type="text" placeholder="Search questions...">
+                <button>Search</button>
+            </div>
+            <section class="ask-form">
+            <h2>Ask a Question</h2>
+            <form>
+                <input type="text" placeholder="Enter your question" required>
+                <textarea placeholder="Provide more details..." required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+
+           <h2>Recent Questions</h2>
+            <div class="question">  
+                <h3>How do I get my JavaScript cash machine simulator to work in my Node.js terminal?</h3>
+                <p>Tags: <span class="tag">html</span></p>
+                <p>Asked by: <span class="user">John Doe</span></p>
+                <button class="vote-btn">Upvote</button>
+                <button class="vote-btn">Downvote</button>
+                <button class="vote-btn">Comment</button>
+            </div>
+        </section>
+
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2025 DevAnswers. All rights reserved.</p>
+    </footer>
+</body>
 </html>
