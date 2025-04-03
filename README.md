@@ -8,5 +8,4 @@ DevAnswers é um site de perguntas e respostas sobre programação, inspirado no
 ✅ Votação (Upvote/Downvote) – Usuários podem votar nas melhores respostas.
 ✅ Tags/Categorias – Organização por linguagens (JavaScript, Python, etc.).
 ✅ Busca Simples – Filtro para encontrar perguntas.
-✅ Design Responsivo – Funciona em desktop e mobile.
 ✅ Modo Claro/Escuro – Alternância de tema visual.

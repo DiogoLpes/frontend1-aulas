@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevAnswers - A platform to ask and answer programming questions.">
+    <meta name="keywords" content="programming, questions, answers, community">
+    <meta name="author" content="DevAnswers Team">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <title>DevAnswers</title>
 </head>
@@ -14,45 +18,49 @@
                 <h1 class="logo">DevAnswers</h1>
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link active">home</a>
+                <a href="index.html" class="nav-link active">Home</a>
                 <a href="Tags.html" class="nav-link">Tags</a>
-                <a href="#" class="nav-link">Users</a>
+                <a href="#" class="nav-link">Contacts</a>
             </nav>
         </div>
     </header>
-
+    <div class="search-box">
+        <input type="text" placeholder="Search questions...">
+        <button>Search</button>
+    </div>
     <main class="main-content">
-        
-        <section class="questions">
-            <div class="search-box">
-                <input type="text" placeholder="Search questions...">
-                <button>Search</button>
-            </div>
-            <section class="ask-form">
+        <section class="ask-form">
             <h2>Ask a Question</h2>
-            <form>
-                <input type="text" placeholder="Enter your question" required>
-                <textarea placeholder="Provide more details..." required></textarea>
+            <form id="question-form">
+                <label for="question-title">Title</label>
+                <input type="text" id="question-title" placeholder="Enter your question title" required>
+
+                <label for="question-tags">Tags</label>
+                <select id="question-tags" multiple required>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="nodejs">Node.js</option>
+                    <option value="react">React</option>
+                </select>
+
+                <label for="question-details">Description</label>
+                <textarea id="question-details" placeholder="Explain your issue in detail." required></textarea>
+
                 <button type="submit">Submit</button>
             </form>
         </section>
 
-           <h2>Recent Questions</h2>
-            <div class="question">  
-                <h3>How do I get my JavaScript cash machine simulator to work in my Node.js terminal?</h3>
-                <p>Tags: <span class="tag">html</span></p>
-                <p>Asked by: <span class="user">John Doe</span></p>
-                <button class="vote-btn">Upvote</button>
-                <button class="vote-btn">Downvote</button>
-                <button class="vote-btn">Comment</button>
-            </div>
+        <section class="questions">
+            <h2>Recent Questions</h2>
         </section>
-
-        
     </main>
 
-    <footer>
+    <footer class="footer"> 
         <p>&copy; 2025 DevAnswers. All rights reserved.</p>
     </footer>
+
+    <script src="scrips.js"></script>
 </body>
 </html>

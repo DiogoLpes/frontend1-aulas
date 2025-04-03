@@ -1,0 +1,20 @@
+{
+    "questions": [
+        {
+            "question": "How do I get my JavaScript cash machine simulator to work in my Node.js terminal?",
+            "tags": ["html", "css", "javascript"],
+            "description": "I am trying to create a cash machine simulator using JavaScript, but I am having trouble getting it to work in my Node.js terminal. Can anyone help me with this?",
+            "user": "John Doe",
+            "answers": ["You can debug it using console.log statements.", "Check your Node.js version."],
+            "votes": 0
+        },
+        {
+            "question": "What is the difference between let, const, and var in JavaScript?",
+            "tags": ["javascript", "es6"],
+            "description": "I am confused about the differences between let, const, and var in JavaScript. Can someone explain it to me?",
+            "user": "Jane Smith",
+            "answers": ["let and const are block-scoped.", "var is function-scoped."],
+            "votes": 5
+        }
+    ]
+}
