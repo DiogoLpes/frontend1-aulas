@@ -30,11 +30,11 @@ body {
 .nav-link {
     color: white;
     text-decoration: none;
+    padding: 10px 15px;
 }
 
 .nav-link.active {
     font-weight: bold;
-    text-decoration: underline;
 }
 
 .main-content {
@@ -46,28 +46,18 @@ body {
 .search-box {
     display: flex;
     justify-content: center;
-    margin: 30px 0px;
+    margin: 30px 100px;
 }
 
 .search-box input {
-    width: 70%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.search-box button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    width: 50%;
+    padding: 15px;
+    border-radius: 30px;
 }
 
 .ask-form {
     margin-top: 20px;
-    padding: 20px;
+    padding: 50px;
     background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
