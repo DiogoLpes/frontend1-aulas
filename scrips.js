@@ -1,6 +1,21 @@
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
 
 const questionForm = document.getElementById("question-form");
 const questionContainer = document.querySelector(".questions");
+
+
+
+document.querySelector('search bar input').addEventListener('input', function (event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const questions = getQuestionsFromLocalStorage();
+    const filteredQuestions = questions.filter(q => 
+        q.question.toLowerCase().includes(searchTerm) || q.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+    );
+    renderQuestions(filteredQuestions);
+});
 
 // Fetch questions from data.json
 async function fetchQuestions() {
