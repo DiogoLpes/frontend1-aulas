@@ -17,6 +17,7 @@ body.dark-mode {
 body.dark-mode .question {
     background-color: #1e1e1e;
     border-color: #333;
+    color: #333;
 }
 
 .navbar {
