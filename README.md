@@ -1,6 +1,6 @@
 DevAnswers (Stack Overflow Clone Simplificado)
 
-📌 Descrição
+📌 Descrição    
 DevAnswers é um site de perguntas e respostas sobre programação, inspirado no Stack Overflow, mas simplificado e construído apenas com HTML, CSS e JavaScript. O objetivo é criar uma plataforma onde desenvolvedores possam tirar dúvidas, compartilhar conhecimento e ajudar a comunidade.
 
 ✨ Recursos do Projeto

@@ -1,3 +1,13 @@
+
+import { getPosts, createPost, updatePost, deletePost } from "./api/api.js";
+
+// ==========================
+// DOM Elements
+// ==========================
+const questionForm = document.getElementById("question-form");
+const questionContainer = document.querySelector(".questions");
+const searchInput = document.querySelector('.search-box input');
+
 // ==========================
 // Theme Toggle Functionality
 // ==========================
@@ -9,60 +19,37 @@ themeToggleButton.addEventListener('click', () => {
 });
 
 // ==========================
-// DOM Elements
-// ==========================
-const questionForm = document.getElementById("question-form");
-const questionContainer = document.querySelector(".questions");
-const searchInput = document.querySelector('.search-box input');
-
-// ==========================
 // Search Functionality
 // ==========================
 searchInput.addEventListener('input', function (event) {
     const searchTerm = event.target.value.toLowerCase();
     const questions = getQuestionsFromLocalStorage();
-    const filteredQuestions = questions.filter(q => 
-        q.question.toLowerCase().includes(searchTerm) || 
+    const filteredQuestions = questions.filter(q =>
+        q.question.toLowerCase().includes(searchTerm) ||
         q.tags.some(tag => tag.toLowerCase().includes(searchTerm))
     );
     renderQuestions(filteredQuestions);
 });
 
 // ==========================
-// Fetch Questions from data.json
+// Fetch and Render Questions
 // ==========================
 async function fetchQuestions() {
     try {
-        const response = await fetch("data.json");
-        if (!response.ok) throw new Error("Failed to fetch questions");
-
-        const data = await response.json();
-        saveQuestionsToLocalStorage(data.questions);
-        renderQuestions(data.questions);
+        const questions = await getPosts();
+        renderQuestions(questions);
     } catch (error) {
         console.error("Error fetching questions:", error);
     }
 }
 
 // ==========================
-// LocalStorage Functions
-// ==========================
-function saveQuestionsToLocalStorage(questions) {
-    localStorage.setItem("questions", JSON.stringify(questions));
-}
-
-function getQuestionsFromLocalStorage() {
-    const storedQuestions = localStorage.getItem("questions");
-    return storedQuestions ? JSON.parse(storedQuestions) : [];
-}
-
-// ==========================
 // Render Questions
 // ==========================
 function renderQuestions(questions) {
-    questionContainer.innerHTML = ""; 
+    questionContainer.innerHTML = "";
 
-    questions.forEach((q, index) => {
+    questions.forEach((q) => {
         const questionDiv = document.createElement("div");
         questionDiv.classList.add("question");
         questionDiv.innerHTML = `
@@ -72,8 +59,8 @@ function renderQuestions(questions) {
             <p>Asked by: <span class="user">${q.user}</span></p>
             <p>Answers: ${q.answers.length}</p>
             <p>Votes: ${q.votes}</p>
-            <button class="vote-btn" onclick="voteQuestion(${index}, 'upvote')">Upvote</button>
-            <button class="vote-btn" onclick="voteQuestion(${index}, 'downvote')">Downvote</button>
+            <button class="vote-btn" onclick="voteQuestion(${q.id}, 'upvote')">Upvote</button>
+            <button class="vote-btn" onclick="voteQuestion(${q.id}, 'downvote')">Downvote</button>
         `;
         questionContainer.appendChild(questionDiv);
     });
@@ -82,20 +69,38 @@ function renderQuestions(questions) {
 // ==========================
 // Add New Question
 // ==========================
-function addQuestion(title, tags, description) {
+document.getElementById("add-question-btn").addEventListener("click", function () {
+    const title = document.getElementById("question-title").value.trim();
+    const tags = Array.from(document.querySelectorAll("#question-tags input:checked")).map(checkbox => checkbox.value);
+    const description = document.getElementById("question-details").value.trim();
+
+    if (!title || tags.length === 0 || !description) {
+        alert("Please fill out all fields and select at least one tag.");
+        return;
+    }
+
+    addQuestion(title, tags, description);
+}
+);
+// ==========================
+// Add Question Function
+// ==========================
+async function addQuestion(title, tags, description) {
     const newQuestion = {
         question: title,
         tags: tags,
         description: description,
-        user: "Anonymous", 
+        user: "Anonymous",
         answers: [],
         votes: 0,
     };
 
-    const questions = getQuestionsFromLocalStorage();
-    questions.push(newQuestion);
-    saveQuestionsToLocalStorage(questions);
-    renderQuestions(questions);
+    try {
+        await createPost(newQuestion);
+        fetchQuestions(); // Refresh the questions list
+    } catch (error) {
+        console.error("Error adding question:", error);
+    }
 }
 
 // ==========================
@@ -103,42 +108,38 @@ function addQuestion(title, tags, description) {
 // ==========================
 function handleFormSubmit(event) {
     event.preventDefault();
-
-    const title = document.getElementById("question-title").value;
+    const title = document.getElementById("question-title").value.trim();
     const tags = Array.from(document.querySelectorAll("#question-tags input:checked")).map(checkbox => checkbox.value);
     const description = document.getElementById("question-details").value.trim();
-
+    if (!title || tags.length === 0 || !description) {
+        alert("Please fill out all fields and select at least one tag.");
+        return;
+    }
     addQuestion(title, tags, description);
-
     questionForm.reset();
 }
 
 // ==========================
 // Voting Functionality
 // ==========================
-function voteQuestion(index, type) {
-    const questions = getQuestionsFromLocalStorage();   
+async function voteQuestion(questionId, type) {
+    try {
+        const question = await getPost(questionId);
+        const updatedVotes = type === "upvote" ? question.votes + 1 : question.votes - 1;
 
-    if (type === "upvote") {
-        questions[index].votes++;
-    } else if (type === "downvote") {
-        questions[index].votes--;
+        await updatePost(questionId, { votes: updatedVotes });
+        fetchQuestions(); // Refresh the questions list
+    } catch (error) {
+        console.error("Error updating votes:", error);
     }
-
-    saveQuestionsToLocalStorage(questions);
-    renderQuestions(questions);
 }
+voteQuestion();
 
 // ==========================
 // Initialize App
 // ==========================
 function initializeApp() {
-    const storedQuestions = getQuestionsFromLocalStorage();
-    if (storedQuestions.length > 0) {
-        renderQuestions(storedQuestions);
-    } else {
-        fetchQuestions(); 
-    }
+    fetchQuestions();
 }
 
 // ==========================

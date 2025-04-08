@@ -1,6 +1,7 @@
 {
     "questions": [
         {
+            "id": 1,
             "question": "How do I get my JavaScript cash machine simulator to work in my Node.js terminal?",
             "tags": ["html", "css", "javascript"],
             "description": "I am trying to create a cash machine simulator using JavaScript, but I am having trouble getting it to work in my Node.js terminal. Can anyone help me with this?",
@@ -9,12 +10,22 @@
             "votes": 0
         },
         {
+            "id": 2,
             "question": "What is the difference between let, const, and var in JavaScript?",
             "tags": ["javascript", "es6"],
             "description": "I am confused about the differences between let, const, and var in JavaScript. Can someone explain it to me?",
             "user": "Jane Smith",
             "answers": ["let and const are block-scoped.", "var is function-scoped."],
             "votes": 5
+        },
+        {
+            "id": 3,
+            "question": "How do I center a div in CSS?",
+            "tags": ["css", "html"],
+            "description": "I am trying to center a div element in CSS, but I can't seem to get it right. Can someone help me?",
+            "user": "Alice Johnson",
+            "answers": ["You can use margin: auto.", "Use flexbox for better alignment."],
+            "votes": 2
         }
     ]
-}
+}   
