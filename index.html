@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="style.css">
     <title>DevAnswers</title>
 </head>
+
 <body>
     <header class="header">
         <div class="navbar">
@@ -35,33 +37,24 @@
             <form id="question-form">
                 <label for="question-title">Title</label>
                 <input type="text" id="question-title" placeholder="Enter your question title" required>
-
-                <label for="question-tags">Tags</label>
-                <select id="question-tags" multiple required>
-                    <option value="html">HTML</option>
-                    <option value="css">CSS</option>
-                    <option value="javascript">JavaScript</option>
-                    <option value="python">Python</option>
-                    <option value="nodejs">Node.js</option>
-                    <option value="react">React</option>
-                </select>
-
                 <label for="question-details">Description</label>
                 <textarea id="question-details" placeholder="Explain your issue in detail." required></textarea>
 
-                <button type="submit">Submit</button>
+                <button type="submit" id="add-question-btn">Submit</button>
             </form>
         </section>
 
         <section class="questions">
             <h2>Recent Questions</h2>
+            <div id="post-list"></div>
         </section>
     </main>
 
-    <footer class="footer"> 
+    <footer class="footer">
         <p>&copy; 2025 DevAnswers. All rights reserved.</p>
     </footer>
 
     <script src="scrips.js" type="module"></script>
 </body>
+
 </html>
