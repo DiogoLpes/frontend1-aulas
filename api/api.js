@@ -17,10 +17,16 @@ export const createPost = async (question) => {
   });
   const data = await response.json();
   return data;
+} 
+
+export async function updatePost(updatedPost) {
+    const response = await fetch(apiURL + "question", {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedPost)
+    });
+    return await response.json();
 }
-
-
-
 
 
 
