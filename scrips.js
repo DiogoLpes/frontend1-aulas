@@ -32,7 +32,40 @@ fetch(techAPI)
     )
     .catch(error => console.error('Error fetching articles:', error));
 
+// Fetch and Display Tech News
+async function fetchTechNews() {
+    try {
+        const response = await fetch("https://67f588ef913986b16fa4ea40.mockapi.io/news");
+        const news = await response.json();
+        const articleList = document.querySelectorAll("#article-list");
+        articleList.forEach((article, index) => {
+            if (news[index]) {
+                article.textContent = news[index].title;
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching tech news:", error);
+    }
+}
+fetchTechNews();
 
+// Fetch and Display Tags
+async function fetchTags() {
+    try {
+        const response = await fetch("https://67f588ef913986b16fa4ea3f.mockapi.io/tags");
+        const tags = await response.json();
+        const tagList = document.querySelector(".tag-list");
+        tagList.innerHTML = tags.map(tag => `
+            <div class="tag-item">
+                <a href="#" class="tag">${tag.name}</a>
+                <span class="tag-count">(${tag.count} questions)</span>
+            </div>
+        `).join("");
+    } catch (error) {
+        console.error("Error fetching tags:", error);
+    }
+}
+fetchTags();
 
 // Fetch and Display Questions
 async function fetchQuestions() {
@@ -56,18 +89,34 @@ function displayPosts(questions) {
             <p><strong>Votes:</strong> ${question.votes}</p>
             <button class="vote-btn like" data-id="${question.id}">Like</button>
             <button class="vote-btn dislike" data-id="${question.id}">Dislike</button>
+            <div class="comments-section">
+                <h4>Comments:</h4>
+                <ul class="comments-list">
+                    ${question.comments?.map(comment => `<li>${comment}</li>`).join("") || ""}
+                </ul>
+                <input type="text" class="comment-input" placeholder="Add a comment..." />
+                <button class="comment-btn" data-id="${question.id}">Comment</button>
+            </div>
         `;
         postList.appendChild(postItem);
     });
+
+    // Add event listeners for comment buttons
+    document.querySelectorAll(".comment-btn").forEach(button => {
+        button.addEventListener("click", handleComment);
+    });
 }
 
-
-
 // Add search functionality
-searchInput.addEventListener("input", () => {
-    returnedQuestions = questions.filter(question =>
-        question.question.toLowerCase().includes(searchInput.value.toLowerCase())
+searchInput.addEventListener("input", async () => {
+    const query = searchInput.value.toLowerCase();
+    const questions = await getPosts();
+    const filteredQuestions = questions.filter(q =>
+        q.question.toLowerCase().includes(query) ||
+        q.description.toLowerCase().includes(query) ||
+        q.tags.some(tag => tag.toLowerCase().includes(query))
     );
+    displayPosts(filteredQuestions);
 });
 
 // Handle Voting
@@ -86,6 +135,30 @@ async function handleVote(event) {
     }
 }
 
+// Handle Commenting
+async function handleComment(event) {
+    const questionId = event.target.dataset.id;
+    const commentInput = event.target.previousElementSibling;
+    const commentText = commentInput.value.trim();
+
+    if (!commentText) {
+        alert("Please enter a comment.");
+        return;
+    }
+
+    try {
+        const questions = await getPosts();
+        const question = questions.find(q => q.id == questionId);
+        question.comments = question.comments || [];
+        question.comments.push(commentText);
+
+        await updatePost(question);
+        fetchQuestions(); // Refresh the list
+    } catch (error) {
+        console.error("Error adding comment:", error);
+    }
+}
+
 // Add New Question
 async function addQuestion(title, description) {
     const newQuestion = {
@@ -93,7 +166,8 @@ async function addQuestion(title, description) {
         description: description,
         user: "Anonymous",
         votes: 0,
-        answers: []
+        answers: [],
+        comments: [] // Initialize comments array
     };
 
     try {
@@ -102,6 +176,14 @@ async function addQuestion(title, description) {
     } catch (error) {
         console.error("Error adding question:", error);
     }
+}
+
+// Add Answer to a Question
+async function addAnswer(questionId, answer) {
+    const question = await getPostById(questionId);
+    question.answers.push(answer);
+    await updatePost(question);
+    fetchQuestions(); // Refresh the list
 }
 
 // Handle Form Submission
