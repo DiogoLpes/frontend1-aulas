@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact DevAnswers - A platform for programming Q&A.">
+    <link rel="stylesheet" href="contacts.css">
+    <title>Contacts - DevAnswers</title>
+</head>
+<body>
+    <header class="header">
+        <div class="navbar">
+            <div class="container">
+                <img src="" alt="Logo" class="logo-img">
+                <h1 class="logo">DevAnswers</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="Tags.html" class="nav-link">Tags</a>
+                <a href="Contacts.html" class="nav-link active">Contacts</a>
+                <button id="theme-toggle">Dark Mode</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="contact-section">
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Your name" required>
+                
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="your@email.com" required>
+                
+                <label for="message">Message</label>
+                <textarea id="message" placeholder="How can we help?" required></textarea>
+                
+                <button type="submit" id="send-btn">Send</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 DevAnswers. All rights reserved.</p>
+    </footer>
+
+    <script src="scrips.js" type="module"></script>
+</body>
+</html>

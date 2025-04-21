@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Browse tags on DevAnswers - A platform for programming Q&A.">
+    <link rel="stylesheet" href="tags.css">
     <title>Tags - DevAnswers</title>
 </head>
 <body>
@@ -16,28 +17,25 @@
             <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="Tags.html" class="nav-link active">Tags</a>
-                <a href="#" class="nav-link">Users</a>
+                <a href="Contacts.html" class="nav-link">Contacts</a>
+                <button id="theme-toggle">Dark Mode</button>
             </nav>
         </div>
     </header>
 
     <main class="main-content">
+        <h1>Latest Tech News</h1>
+        <div id="news-container" class="news-container">
+            <div class="loading">Loading latest tech news...</div>
+        </div>
+        <button id="refresh-btn" class="refresh-btn">Refresh News</button>
         <div class="search-box">
-            <input type="text" placeholder="Search tags...">
-
+            <input type="text" placeholder="Search tags..." id="tag-search">
         </div>
 
         <section class="tags">
             <h2>Tags</h2>
             <div class="tag-list">
-                <div class="tag-item">
-                    <a href="#" class="tag">HTML</a>
-                    <span class="tag-count">(12 questions)</span>
-                </div>
-                <div class="tag-item">
-                    <a href="#" class="tag">CSS</a>
-                    <span class="tag-count">(8 questions)</span>
-                </div>
                 <div class="tag-item">
                     <a href="#" class="tag">JavaScript</a>
                     <span class="tag-count">(20 questions)</span>
@@ -46,14 +44,6 @@
                     <a href="#" class="tag">Python</a>
                     <span class="tag-count">(15 questions)</span>
                 </div>
-                <div class="tag-item">
-                    <a href="#" class="tag">Node.js</a>
-                    <span class="tag-count">(10 questions)</span>
-                </div>
-                <div class="tag-item">
-                    <a href="#" class="tag">React</a>
-                    <span class="tag-count">(5 questions)</span>
-                </div>
             </div>
         </section>
     </main>
@@ -61,5 +51,7 @@
     <footer class="footer">
         <p>&copy; 2025 DevAnswers. All rights reserved.</p>
     </footer>
+
+    <script src="scrips.js" type="module"></script>
 </body>
 </html>

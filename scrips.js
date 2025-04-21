@@ -5,7 +5,7 @@ const techAPI = "https://dev.to/api/articles?top=1&per_page=1";
 const questionForm = document.getElementById("question-form");
 const postList = document.getElementById("post-list");
 const themeToggleButton = document.getElementById('theme-toggle');
-const searchInput = document.getElementById("search-box");
+
 
 // Theme Toggle
 themeToggleButton.addEventListener('click', () => {
@@ -13,24 +13,7 @@ themeToggleButton.addEventListener('click', () => {
     themeToggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
 });
 
-// Fetch and Display Tech Articles
 
-fetch(techAPI)
-    .then(response => response.json())
-    .then(data => {
-        const articleList = document.getElementById('article-list');
-        data.forEach(article => {
-            const articleItem = document.createElement('li');
-            articleItem.innerHTML = `
-                <h3>${article.title}</h3>
-                <p>${article.description}</p>
-                <a href="${article.url}" target="_blank">Read more</a>
-            `;
-            articleList.appendChild(articleItem);
-        });
-    }
-    )
-    .catch(error => console.error('Error fetching articles:', error));
 
 // Fetch and Display Tech News
 async function fetchTechNews() {
@@ -49,23 +32,21 @@ async function fetchTechNews() {
 }
 fetchTechNews();
 
-// Fetch and Display Tags
-async function fetchTags() {
-    try {
-        const response = await fetch("https://67f588ef913986b16fa4ea3f.mockapi.io/tags");
-        const tags = await response.json();
-        const tagList = document.querySelector(".tag-list");
-        tagList.innerHTML = tags.map(tag => `
-            <div class="tag-item">
-                <a href="#" class="tag">${tag.name}</a>
-                <span class="tag-count">(${tag.count} questions)</span>
-            </div>
-        `).join("");
-    } catch (error) {
-        console.error("Error fetching tags:", error);
-    }
+function displayArticle(article) {
+    const Date = new Date(article.published_at).toLocaleDateString();
+    document.getElementById("news-container").innerHTML = `
+        <h2>${article.title}</h2>
+        <p>${article.description}</p>
+        <p><strong>Published on:</strong> ${Date}</p>
+        <p><strong>Author:</strong> ${article.author}</p>
+        <a href="${article.url}" target="_blank">Read more</a>
+    `;
 }
-fetchTags();
+displayArticle();
+
+
+
+
 
 // Fetch and Display Questions
 async function fetchQuestions() {
@@ -107,33 +88,6 @@ function displayPosts(questions) {
     });
 }
 
-// Add search functionality
-searchInput.addEventListener("input", async () => {
-    const query = searchInput.value.toLowerCase();
-    const questions = await getPosts();
-    const filteredQuestions = questions.filter(q =>
-        q.question.toLowerCase().includes(query) ||
-        q.description.toLowerCase().includes(query) ||
-        q.tags.some(tag => tag.toLowerCase().includes(query))
-    );
-    displayPosts(filteredQuestions);
-});
-
-// Handle Voting
-async function handleVote(event) {
-    const questionId = event.target.dataset.id;
-    const isLike = event.target.classList.contains('like');
-
-    try {
-        const questions = await getPosts();
-        const question = questions.find(q => q.id == questionId);
-        question.votes += isLike ? 1 : -1;
-        await updatePost(questionId, question);
-        fetchQuestions(); // Refresh the list
-    } catch (error) {
-        console.error("Error voting:", error);
-    }
-}
 
 // Handle Commenting
 async function handleComment(event) {
@@ -166,24 +120,14 @@ async function addQuestion(title, description) {
         description: description,
         user: "Anonymous",
         votes: 0,
-        answers: [],
-        comments: [] // Initialize comments array
+        comments: [] 
     };
-
     try {
         await createPost(newQuestion);
         fetchQuestions(); // Refresh the list
     } catch (error) {
         console.error("Error adding question:", error);
     }
-}
-
-// Add Answer to a Question
-async function addAnswer(questionId, answer) {
-    const question = await getPostById(questionId);
-    question.answers.push(answer);
-    await updatePost(question);
-    fetchQuestions(); // Refresh the list
 }
 
 // Handle Form Submission
@@ -199,8 +143,8 @@ function handleFormSubmit(event) {
     questionForm.reset();
 }
 
-// Initialize the app
-// Initialize App
+
+
 function initializeApp() {
     fetchQuestions();
     questionForm.addEventListener("submit", handleFormSubmit);
