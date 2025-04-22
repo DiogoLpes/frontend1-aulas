@@ -1,3 +1,41 @@
+html,
+body {
+    font-family: 'Droid Serif', serif;
+    margin: 0 auto;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 1.5rem;
+    gap: 8px;
+  }
+  
+  .bracket {
+    color: #007BFF;
+    font-size: 1.8em;
+    font-weight: bold;
+    transition: transform 0.2s;
+  }
+  
+  .logo-text {
+    color: #ffffff;
+    font-weight: 700;
+  }
+  
+  body.dark-mode .logo-text {
+    color: white;
+  }
+  
+  body.dark-mode .bracket {
+    color: #4da6ff;
+  }
+  
+  /* Add subtle animation */
+  .logo:hover .bracket {
+    transform: scale(1.1);
+  }
+
 header {
     background-color: #000000;
     color: white;
@@ -104,4 +142,18 @@ header {
     background-color: #2d2d2d;
     border-color: #444;
     color: #fff;
+  }
+
+  .footer {
+    background: linear-gradient(135deg, #000000 0%, #121212 100%);
+    padding: 30px 0;
+    margin-top: 60px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .footer p {
+    margin: 0;
+    padding: 0;
   }

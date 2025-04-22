@@ -1,64 +1,84 @@
 import { getPosts, createPost, updatePost } from "./api/api.js";
-const techAPI = "https://dev.to/api/articles?top=1&per_page=1";    
+const techAPI = "https://dev.to/api/articles?top=1&per_page=5";    
 
 // DOM Elements
 const questionForm = document.getElementById("question-form");
 const postList = document.getElementById("post-list");
 const themeToggleButton = document.getElementById('theme-toggle');
-
+const newsContainer = document.getElementById("news-container");
+const refreshBtn = document.getElementById("refresh-btn");
 
 // Theme Toggle
-themeToggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    themeToggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-});
-
-
+if (themeToggleButton) {
+    themeToggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeToggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+    });
+}
 
 // Fetch and Display Tech News
 async function fetchTechNews() {
+    if (!newsContainer) return;
+    
     try {
-        const response = await fetch("https://67f588ef913986b16fa4ea40.mockapi.io/news");
-        const news = await response.json();
-        const articleList = document.querySelectorAll("#article-list");
-        articleList.forEach((article, index) => {
-            if (news[index]) {
-                article.textContent = news[index].title;
-            }
-        });
+        newsContainer.innerHTML = `<div class="loading">Loading latest tech news...</div>`;
+        const response = await fetch(techAPI);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch tech news: ${response.status}`);
+        }
+        
+        const articles = await response.json();
+        displayTechNews(articles);
     } catch (error) {
         console.error("Error fetching tech news:", error);
+        if (newsContainer) {
+            newsContainer.innerHTML = `
+                <div class="error">
+                    <p>Failed to load tech news. Please try again later.</p>
+                    <p>${error.message}</p>
+                </div>
+            `;
+        }
     }
 }
-fetchTechNews();
 
-function displayArticle(article) {
-    const Date = new Date(article.published_at).toLocaleDateString();
-    document.getElementById("news-container").innerHTML = `
-        <h2>${article.title}</h2>
-        <p>${article.description}</p>
-        <p><strong>Published on:</strong> ${Date}</p>
-        <p><strong>Author:</strong> ${article.author}</p>
-        <a href="${article.url}" target="_blank">Read more</a>
-    `;
+function displayTechNews(articles) {
+    if (!newsContainer) return;
+    
+    newsContainer.innerHTML = articles.map(article => {
+        const publishDate = new Date(article.published_at).toLocaleDateString();
+        return `
+            <div class="news-item">
+                <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
+                <p>${article.description || 'No description available'}</p>
+                <div class="news-meta">
+                    <span class="news-author">By ${article.user?.name || 'Unknown author'}</span>
+                    <span class="news-date">${publishDate}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
-displayArticle();
-
-
-
-
 
 // Fetch and Display Questions
 async function fetchQuestions() {
+    if (!postList) return;
+    
     try {
         const questions = await getPosts();
         displayPosts(questions);
     } catch (error) {
         console.error("Error fetching questions:", error);
+        if (postList) {
+            postList.innerHTML = `<p class="error">Failed to load questions. Please try again later.</p>`;
+        }
     }
 }
 
 function displayPosts(questions) {
+    if (!postList) return;
+    
     postList.innerHTML = "";
     questions.forEach((question) => {
         const postItem = document.createElement("div");
@@ -87,7 +107,6 @@ function displayPosts(questions) {
         button.addEventListener("click", handleComment);
     });
 }
-
 
 // Handle Commenting
 async function handleComment(event) {
@@ -143,10 +162,20 @@ function handleFormSubmit(event) {
     questionForm.reset();
 }
 
-
-
 function initializeApp() {
-    fetchQuestions();
-    questionForm.addEventListener("submit", handleFormSubmit);
+    // Only run these if the elements exist on the page
+    if (questionForm) {
+        questionForm.addEventListener("submit", handleFormSubmit);
+        fetchQuestions();
+    }
+    
+    if (newsContainer) {
+        fetchTechNews();
+    }
+    
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', fetchTechNews);
+    }
 }
+
 initializeApp();

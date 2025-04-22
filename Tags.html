@@ -11,8 +11,11 @@
     <header class="header">
         <div class="navbar">
             <div class="container">
-                <img src="" alt="Logo" class="logo-img">
-                <h1 class="logo">DevAnswers</h1>
+                <div class="logo">
+                    <span class="bracket">[</span>
+                    <span class="logo-text">DevAnswers</span>
+                    <span class="bracket">]</span>
+                </div>
             </div>
             <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
@@ -24,28 +27,24 @@
     </header>
 
     <main class="main-content">
-        <h1>Latest Tech News</h1>
-        <div id="news-container" class="news-container">
-            <div class="loading">Loading latest tech news...</div>
-        </div>
-        <button id="refresh-btn" class="refresh-btn">Refresh News</button>
-        <div class="search-box">
-            <input type="text" placeholder="Search tags..." id="tag-search">
-        </div>
-
         <section class="tags">
-            <h2>Tags</h2>
+            <div class="search-box">
+                <input type="text" placeholder="Search tags..." id="tag-search">
+            </div>
+            <h2>Popular Tags</h2>
             <div class="tag-list">
-                <div class="tag-item">
-                    <a href="#" class="tag">JavaScript</a>
-                    <span class="tag-count">(20 questions)</span>
-                </div>
-                <div class="tag-item">
-                    <a href="#" class="tag">Python</a>
-                    <span class="tag-count">(15 questions)</span>
-                </div>
+      
             </div>
         </section>
+        <section class="tech-news">
+            <h2>Latest Tech News</h2>
+            <div id="news-container" class="news-container">
+                <div class="loading">Loading latest tech news...</div>
+            </div>
+            <button id="refresh-btn" class="refresh-btn">Refresh News</button>
+        </section>
+    
+        
     </main>
 
     <footer class="footer">
