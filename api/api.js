@@ -28,5 +28,11 @@ export async function updatePost(updatedPost) {
     return await response.json();
 }
 
-
+export const deletePost = async (id) => {
+  const response = await fetch(apiURL + "question/" + id, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  return data;
+}
 

@@ -23,11 +23,9 @@ async function fetchTechNews() {
     try {
         newsContainer.innerHTML = `<div class="loading">Loading latest tech news...</div>`;
         const response = await fetch(techAPI);
-        
         if (!response.ok) {
             throw new Error(`Failed to fetch tech news: ${response.status}`);
         }
-        
         const articles = await response.json();
         displayTechNews(articles);
     } catch (error) {

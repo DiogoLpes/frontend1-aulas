@@ -1,8 +1,22 @@
 html,
 body {
-    font-family: 'Droid Serif', serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
     margin: 0 auto;
+
 }
+
+:root{
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
 .logo {
     display: flex;
     align-items: center;
