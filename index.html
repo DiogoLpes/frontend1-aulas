@@ -9,6 +9,7 @@
     <meta name="author" content="DevAnswers Team">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <title>DevAnswers</title>
 </head>
 
@@ -17,7 +18,17 @@
     <div class="search-box">
         <input type="text" id="search-box" placeholder="Search questions...">
     </div>
+    <section>
+        <div class="swiper">
+            <div class="swiper-wrapper" id="swiper-wrapper">
 
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </section>
     <main class="main-content">
         <section class="ask-form">
             <h2>Ask a Question</h2>
@@ -43,7 +54,7 @@
                     <div class="comments-section">
                         <h4>Comment:</h4>
                         <input type="text" class="comment-input" placeholder="Add a comment..." />
-                    
+
                         <button class="comment-btn">Comment</button>
                     </div>
                 </div>

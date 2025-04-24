@@ -1,5 +1,5 @@
 import { getPosts, createPost, updatePost } from "./api/api.js";
-const techAPI = "https://dev.to/api/articles?top=1&per_page=5";    
+const techAPI = "https://dev.to/api/articles?top=1&per_page=5";
 
 // DOM Elements
 const questionForm = document.getElementById("question-form");
@@ -13,13 +13,69 @@ if (themeToggleButton) {
     themeToggleButton.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         themeToggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
     });
 }
+
+async function DisplayCarrousel() {
+    const swiperWrapper = document.getElementById("swiper-wrapper");
+    try {
+
+        const questions = await getPosts();
+
+        // Add a slide for each question
+        questions.forEach((question) => {
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+            slide.innerHTML = `
+                <h3>${question.question}</h3>
+                <p>${question.description}</p>
+                <p><strong>User:</strong> ${question.user}</p>
+                <p><strong>Votes:</strong> ${question.votes}</p>
+            `;
+            swiperWrapper.appendChild(slide);
+        });
+    } catch (error) {
+        console.error("Error fetching questions:", error);
+        swiperWrapper.innerHTML = `<p class="error">Failed to load questions. Please try again later.</p>`;
+    }
+}
+DisplayCarrousel();
+// Check for dark mode preference
+if (localStorage.getItem('dark-mode') === 'true') {
+    document.body.classList.add('dark-mode');
+    themeToggleButton.textContent = 'Light Mode';
+} else {
+    document.body.classList.remove('dark-mode');
+    themeToggleButton.textContent = 'Dark Mode';
+}
+
+const swiper = new Swiper('.swiper', {
+    // Optional parameters
+    direction: 'vertical',
+    loop: true,
+    // If we need pagination
+    scrollbar: {
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+        // And if we need scrollbar
+        el: '.swiper-scrollbar',
+    },
+});
+
 
 // Fetch and Display Tech News
 async function fetchTechNews() {
     if (!newsContainer) return;
-    
+
     try {
         newsContainer.innerHTML = `<div class="loading">Loading latest tech news...</div>`;
         const response = await fetch(techAPI);
@@ -41,12 +97,15 @@ async function fetchTechNews() {
     }
 }
 
+// Display Tech News    
 function displayTechNews(articles) {
     if (!newsContainer) return;
-    
+
+
     newsContainer.innerHTML = articles.map(article => {
         const publishDate = new Date(article.published_at).toLocaleDateString();
         return `
+        <div class="swiper-slide">
             <div class="news-item">
                 <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
                 <p>${article.description || 'No description available'}</p>
@@ -55,6 +114,8 @@ function displayTechNews(articles) {
                     <span class="news-date">${publishDate}</span>
                 </div>
             </div>
+        </div>
+
         `;
     }).join('');
 }
@@ -62,7 +123,7 @@ function displayTechNews(articles) {
 // Fetch and Display Questions
 async function fetchQuestions() {
     if (!postList) return;
-    
+
     try {
         const questions = await getPosts();
         displayPosts(questions);
@@ -76,7 +137,7 @@ async function fetchQuestions() {
 
 function displayPosts(questions) {
     if (!postList) return;
-    
+
     postList.innerHTML = "";
     questions.forEach((question) => {
         const postItem = document.createElement("div");
@@ -137,7 +198,7 @@ async function addQuestion(title, description) {
         description: description,
         user: "Anonymous",
         votes: 0,
-        comments: [] 
+        comments: []
     };
     try {
         await createPost(newQuestion);
@@ -166,11 +227,11 @@ function initializeApp() {
         questionForm.addEventListener("submit", handleFormSubmit);
         fetchQuestions();
     }
-    
+
     if (newsContainer) {
         fetchTechNews();
     }
-    
+
     if (refreshBtn) {
         refreshBtn.addEventListener('click', fetchTechNews);
     }
