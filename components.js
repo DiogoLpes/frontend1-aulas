@@ -15,13 +15,11 @@ class SharedHeader extends HTMLElement {
         this.innerHTML = `
        <header class="header">
         <div class="navbar">
-            <div class="container">
                 <div class="logo">
                     <span class="bracket">[</span>
                     <span class="logo-text">DevAnswers</span>
                     <span class="bracket">]</span>
                 </div>
-            </div>
             <nav class="nav">
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="Tags.html" class="nav-link">Tags</a>

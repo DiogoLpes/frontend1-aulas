@@ -17,59 +17,46 @@ if (themeToggleButton) {
     });
 }
 
-async function DisplayCarrousel() {
-    const swiperWrapper = document.getElementById("swiper-wrapper");
-    try {
+async function CarroucelSplide() {
+    const splideList = document.getElementById("splide-list");
 
+    try {
         const questions = await getPosts();
+
+        // Clear existing slides
+        splideList.innerHTML = "";
 
         // Add a slide for each question
         questions.forEach((question) => {
-            const slide = document.createElement("div");
-            slide.className = "swiper-slide";
+            const slide = document.createElement("li");
+            slide.className = "splide__slide";
             slide.innerHTML = `
-                <h3>${question.question}</h3>
-                <p>${question.description}</p>
-                <p><strong>User:</strong> ${question.user}</p>
-                <p><strong>Votes:</strong> ${question.votes}</p>
+                <div class="question-slide">
+                    <h3>${question.question}</h3>
+                    <p>${question.description}</p>
+                    <p><strong>User:</strong> ${question.user}</p>
+                    <p><strong>Votes:</strong> ${question.votes}</p>
+                </div>
             `;
-            swiperWrapper.appendChild(slide);
+            splideList.appendChild(slide);
         });
+
+        // Initialize Splide
+        new Splide("#splide", {
+            type: "loop",
+            perPage: 1  ,
+            perMove: 1,
+            pagination: true,
+            arrows: true,
+        }).mount();
     } catch (error) {
-        console.error("Error fetching questions:", error);
-        swiperWrapper.innerHTML = `<p class="error">Failed to load questions. Please try again later.</p>`;
+        console.error("Error fetching questions for Splide:", error);
     }
 }
-DisplayCarrousel();
-// Check for dark mode preference
-if (localStorage.getItem('dark-mode') === 'true') {
-    document.body.classList.add('dark-mode');
-    themeToggleButton.textContent = 'Light Mode';
-} else {
-    document.body.classList.remove('dark-mode');
-    themeToggleButton.textContent = 'Dark Mode';
-}
 
-const swiper = new Swiper('.swiper', {
-    // Optional parameters
-    direction: 'vertical',
-    loop: true,
-    // If we need pagination
-    scrollbar: {
-        pagination: {
-            el: '.swiper-pagination',
-        },
+// Call the function to populate the Splide slider
+CarroucelSplide();
 
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-
-        // And if we need scrollbar
-        el: '.swiper-scrollbar',
-    },
-});
 
 
 // Fetch and Display Tech News
@@ -145,6 +132,7 @@ function displayPosts(questions) {
         postItem.innerHTML = `
             <h3>${question.question}</h3>
             <p>${question.description}</p>
+            <p><strong>Tags:</strong> ${Array.isArray(question.tags) ? question.tags.join(", ") : "No tags"}</p>
             <p><strong>User:</strong> ${question.user}</p>
             <p><strong>Votes:</strong> ${question.votes}</p>
             <button class="vote-btn like" data-id="${question.id}">Like</button>
@@ -192,10 +180,11 @@ async function handleComment(event) {
 }
 
 // Add New Question
-async function addQuestion(title, description) {
+async function addQuestion(title, description, tags) { 
     const newQuestion = {
         question: title,
         description: description,
+        tags: tags, 
         user: "Anonymous",
         votes: 0,
         comments: []
@@ -213,11 +202,15 @@ function handleFormSubmit(event) {
     event.preventDefault();
     const title = document.getElementById("question-title").value.trim();
     const description = document.getElementById("question-details").value.trim();
-    if (!title || !description) {
-        alert("Please fill out all fields.");
+    const tagsSelect = document.getElementById("question-tags");
+    const tags = Array.from(tagsSelect.selectedOptions).map(option => option.value);
+
+    if (!title || !description || tags.length === 0) {
+        alert("Please fill out all fields and select at least one tag.");
         return;
     }
-    addQuestion(title, description);
+
+    addQuestion(title, description, tags); // Pass `tags` here
     questionForm.reset();
 }
 

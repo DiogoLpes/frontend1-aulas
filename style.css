@@ -6,10 +6,6 @@ body {
 
 }
 
-.swiper {
-    width: 200px;
-    height: 300px;
-  }
 
 .logo {
     display: flex;
@@ -17,32 +13,32 @@ body {
     font-family: 'Fira Code', 'Courier New', monospace;
     font-size: 1.5rem;
     gap: 8px;
-  }
-  
-  .bracket {
+}
+
+.bracket {
     color: #007BFF;
     font-size: 1.8em;
     font-weight: bold;
     transition: transform 0.2s;
-  }
-  
-  .logo-text {
+}
+
+.logo-text {
     color: #ffffff;
     font-weight: 700;
-  }
-  
-  body.dark-mode .logo-text {
+}
+
+body.dark-mode .logo-text {
     color: white;
-  }
-  
-  body.dark-mode .bracket {
+}
+
+body.dark-mode .bracket {
     color: #4da6ff;
-  }
-  
-  /* Add subtle animation */
-  .logo:hover .bracket {
+}
+
+/* Add subtle animation */
+.logo:hover .bracket {
     transform: scale(1.1);
-  }
+}
 
 header {
     background-color: #000000;
@@ -135,12 +131,25 @@ body.dark-mode .question {
     margin-top: 20px;
 }
 
+.container {
+    max-width: 1280px;
+    margin: 0 auto; 
+}
+
 .question {
     border: 1px solid #ddd;
     padding: 15px;
     margin-bottom: 15px;
-    border-radius: 5px;
+    border-radius: 5px;     
     background-color: #fff;
+}
+
+.question-slide {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
 }
 
 .vote-btn {
@@ -164,12 +173,12 @@ body.dark-mode .question {
     text-align: center;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .footer p {
+}
+
+.footer p {
     margin: 0;
     padding: 0;
-  }
+}
 
 .comments-section {
     margin-top: 20px;
@@ -185,7 +194,7 @@ body.dark-mode .question {
     font-weight: bold;
 }
 
- 
+
 .comment-input {
     width: calc(100% - 100px);
     padding: 15px;

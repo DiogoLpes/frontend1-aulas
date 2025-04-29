@@ -11,9 +11,13 @@ async function displayPosts() {
             const questionItem = document.createElement("div");
             questionItem.className = "question-item";
             questionItem.innerHTML = `
-                <h3>${question.title}</h3>
-                <p>${question.description}</p>
-                <button class="delete-button" data-id="${question.id}">Delete</button>
+                <div class="question">
+                    <h3>${question.title}</h3>
+                    <p>${question.description}</p>
+                    <p><strong>User:</strong> ${question.user}</p>
+                    <button class="delete-button" data-id="${question.id}">Delete</button>
+                </div>
+            
             `;
             postList.appendChild(questionItem);
         });
