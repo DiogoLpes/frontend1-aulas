@@ -1,71 +1,154 @@
 html,
 body {
-    font-family: 'Droid Serif', serif;
-    margin: 0 auto;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0 auto;
 }
-.logo {
-    display: flex;
-    align-items: center;
-    font-family: 'Fira Code', 'Courier New', monospace;
-    font-size: 1.5rem;
-    gap: 8px;
-  }
-  
-  .bracket {
-    color: #007BFF;
-    font-size: 1.8em;
-    font-weight: bold;
-    transition: transform 0.2s;
-  }
-  
-  .logo-text {
-    color: #ffffff;
-    font-weight: 700;
-  }
-  
-  body.dark-mode .logo-text {
-    color: white;
-  }
-  
-  body.dark-mode .bracket {
-    color: #4da6ff;
-  }
-  
-  /* Add subtle animation */
-  .logo:hover .bracket {
-    transform: scale(1.1);
+
+:root {
+  --primary-color: #007bff;
+  --primary-light: #e7f1ff;
+  --secondary-color: #6c757d;
+  --dark-color: #343a40;
+  --light-color: #f8f9fa;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tags Section */
+.tags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+.tag-card {
+  background-color: white;
+  color: #333;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  border-left: 4px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.tag-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tag-card.large {
+  grid-column: span 2;
+  padding: 2rem;
+  background-color: var(--primary-light);
+  border-left: none;
+}
+
+.tag-name {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.tag-count {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .tags-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
   }
 
-header {
-    background-color: #000000;
-    color: white;
-    padding: 10px 20px;
+  .tag-card {
+    padding: 1rem;
+  }
+
+  .tag-card.large {
+    grid-column: span 1;
+    padding: 1.5rem;
+  }
+
+  .tag-name {
+    font-size: 1rem;
+  }
 }
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 1.5rem;
+  gap: 8px;
+}
+
+.bracket {
+  color: #007BFF;
+  font-size: 1.8em;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.logo-text {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+body.dark-mode .logo-text {
+  color: white;
+}
+
+body.dark-mode .bracket {
+  color: #4da6ff;
+}
+
+/* Add subtle animation */
+.logo:hover .bracket {
+  transform: scale(1.1);
+}
+
+header {
+  background-color: #000000;
+  color: white;
+  padding: 10px 20px;
+}
+
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo-img {
-    height: 30px;
-    width: auto;
-    margin-right: 10px;
+  height: 30px;
+  width: auto;
+  margin-right: 10px;
 }
 
 .nav {
-    display: flex;
-    gap: 15px;
+  display: flex;
+  gap: 15px;
 }
 
 .nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
 }
 
 .nav-link.active {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* Enhanced News Section Styles */
@@ -197,7 +280,146 @@ body.dark-mode .news-meta {
   color: #8a8a8a;
 }
 
-.footer {
+body.dark-mode .tag-card {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+  border-left: 4px solid var(--primary-dark);
+}
+
+body.dark-mode .tag-card.large {
+  background-color: #3a3a3a;
+}
+
+/* Tags Section Improvements */
+.tags-section {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-box {
+  display: flex;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
+
+.search-box button {
+  padding: 0 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-box button:hover {
+  background-color: #0056b3;
+}
+
+.tags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.tag-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-top: 3px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--primary-color);
+  transition: height 0.3s ease;
+}
+
+.tag-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tag-card:hover::before {
+  height: 5px;
+}
+
+.tag-card.popular {
+  grid-column: span 2;
+  background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 100%);
+}
+
+.tag-name {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tag-name::before {
+  content: '#';
+  color: var(--primary-color);
+}
+
+.tag-count {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  background: #f1f1f1;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.tag-description {
+  margin: 0.8rem 0;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+#page-info {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .tag-card {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+}
+
+body.dark-mode .tag-card.popular {
+  background: linear-gradient(135deg, #1a3a6a 0%, #2c2c2c 100%);
+}
+
+body.dark-mode .tag-des .footer {
   background: linear-gradient(135deg, #000000 0%, #121212 100%);
   padding: 30px 0;
   margin-top: 60px;

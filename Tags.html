@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="tags.css">
     <title>Tags - DevAnswers</title>
 </head>
+
 <body>
     <header class="header">
         <div class="navbar">
@@ -27,30 +29,57 @@
     </header>
 
     <main class="main-content">
-        <section class="tags">
-            <div class="search-box">
-                <input type="text" placeholder="Search tags..." id="tag-search">
+        <section class="tags-section">
+            <div class="section-header">
+                <h2>All Tags</h>
             </div>
-            <h2>Popular Tags</h2>
-            <div class="tag-list">
-      
+
+    
+
+            <div class="tags-grid" id="all-tags-grid">
+                <div class="tag-card large" data-tag="javascript">
+                    <span class="tag-name">JavaScript</span>
+                    <span class="tag-count">1,245 questions</span>
+                </div>
+                <div class="tag-card large" data-tag="python">
+                    <span class="tag-name">Python</span>
+                    <span class="tag-count">982 questions</span>
+                </div>
+                <div class="tag-card large" data-tag="react">
+                    <span class="tag-name">React</span>
+                    <span class="tag-count">756 questions</span>
+                </div>
+                <div class="tag-card large" data-tag="react">
+                    <span class="tag-name">React</span>
+                    <span class="tag-count">756 questions</span>
+                </div>
+                <div class="tag-card large" data-tag="react">
+                    <span class="tag-name">React</span>
+                    <span class="tag-count">756 questions</span>
+                </div>
+                <div class="tag-card large" data-tag="react">
+                    <span class="tag-name">React</span>
+                    <span class="tag-count">756 questions</span>
+                </div>
+
             </div>
+
+
         </section>
+
         <section class="tech-news">
-            <h2>Latest Tech News</h2>
+            <div class="section-header">
+                <h2>Latest Tech News</h2>
+            </div>
             <div id="news-container" class="news-container">
                 <div class="loading">Loading latest tech news...</div>
             </div>
-            <button id="refresh-btn" class="refresh-btn">Refresh News</button>
         </section>
-    
-        
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2025 DevAnswers. All rights reserved.</p>
-    </footer>
-
+    <shared-component></shared-component>
     <script src="scrips.js" type="module"></script>
+    <script src="components.js"></script>
 </body>
+   
 </html>

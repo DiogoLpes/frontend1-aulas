@@ -1,6 +1,13 @@
+const person = {
+    name: "Alice",
+    age: 25,
+    hobbies: ["reading", "gaming", "coding"]
+};
 
-let player = {heath: 100, attack: 10, defense: 5};
-let obj = JSON.stringify(player);
-console.log(obj);
+// Converter para JSON
+const jsonString = JSON.stringify(person);
+console.log("JSON String:", jsonString);
 
-
+// Converter de volta para Objeto JavaScript
+const parsedObject = JSON.parse(jsonString);
+console.log("Parsed Object:", parsedObject);

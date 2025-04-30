@@ -8,6 +8,7 @@ const themeToggleButton = document.getElementById('theme-toggle');
 const newsContainer = document.getElementById("news-container");
 const refreshBtn = document.getElementById("refresh-btn");
 
+
 // Theme Toggle
 if (themeToggleButton) {
     themeToggleButton.addEventListener('click', () => {
