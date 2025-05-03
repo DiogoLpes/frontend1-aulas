@@ -1,33 +1,35 @@
 import { getPosts, createPost, updatePost } from "./api/api.js";
+
+// Constants
 const techAPI = "https://dev.to/api/articles?top=1&per_page=5";
 
 // DOM Elements
 const questionForm = document.getElementById("question-form");
 const postList = document.getElementById("post-list");
-const themeToggleButton = document.getElementById('theme-toggle');
+const themeToggleButton = document.getElementById("theme-toggle");
 const newsContainer = document.getElementById("news-container");
 const refreshBtn = document.getElementById("refresh-btn");
 
-
 // Theme Toggle
-if (themeToggleButton) {
-    themeToggleButton.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+function setupThemeToggle() {
+    if (!themeToggleButton) return;
+
+    themeToggleButton.addEventListener("click", () => {
+        const isDarkMode = document.body.classList.toggle("dark-mode");
+        themeToggleButton.textContent = isDarkMode ? "Light Mode" : "Dark Mode";
+        localStorage.setItem("dark-mode", isDarkMode);
     });
 }
 
-async function CarroucelSplide() {
+// Initialize Splide Carousel
+async function setupCarousel() {
     const splideList = document.getElementById("splide-list");
+    if (!splideList) return;
 
     try {
         const questions = await getPosts();
+        splideList.innerHTML = ""; // Clear existing slides
 
-        // Clear existing slides
-        splideList.innerHTML = "";
-
-        // Add a slide for each question
         questions.forEach((question) => {
             const slide = document.createElement("li");
             slide.className = "splide__slide";
@@ -42,10 +44,9 @@ async function CarroucelSplide() {
             splideList.appendChild(slide);
         });
 
-        // Initialize Splide
         new Splide("#splide", {
             type: "loop",
-            perPage: 1  ,
+            perPage: 1,
             perMove: 1,
             pagination: true,
             arrows: true,
@@ -55,144 +56,138 @@ async function CarroucelSplide() {
     }
 }
 
-// Call the function to populate the Splide slider
-CarroucelSplide();
-
-
-
 // Fetch and Display Tech News
-async function fetchTechNews() {
+async function fetchAndDisplayTechNews() {
     if (!newsContainer) return;
 
     try {
         newsContainer.innerHTML = `<div class="loading">Loading latest tech news...</div>`;
         const response = await fetch(techAPI);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch tech news: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Failed to fetch tech news: ${response.status}`);
+
         const articles = await response.json();
-        displayTechNews(articles);
+        newsContainer.innerHTML = articles.map(article => `
+            <div class="news-item">
+                <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
+                <p>${article.description || "No description available"}</p>
+                <div class="news-meta">
+                    <span class="news-author">By ${article.user?.name || "Unknown author"}</span>
+                    <span class="news-date">${new Date(article.published_at).toLocaleDateString()}</span>
+                </div>
+            </div>
+        `).join("");
     } catch (error) {
         console.error("Error fetching tech news:", error);
-        if (newsContainer) {
-            newsContainer.innerHTML = `
-                <div class="error">
-                    <p>Failed to load tech news. Please try again later.</p>
-                    <p>${error.message}</p>
-                </div>
-            `;
-        }
+        newsContainer.innerHTML = `<div class="error">Failed to load tech news. Please try again later.</div>`;
     }
 }
 
-// Display Tech News    
-function displayTechNews(articles) {
-    if (!newsContainer) return;
+// Handle Like Button Click
+async function handleLike(event) {
+    const button = event.target;
+    const questionId = button.dataset.id;
 
+    if (!questionId) return;
 
-    newsContainer.innerHTML = articles.map(article => {
-        const publishDate = new Date(article.published_at).toLocaleDateString();
-        return `
-        <div class="swiper-slide">
-            <div class="news-item">
-                <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
-                <p>${article.description || 'No description available'}</p>
-                <div class="news-meta">
-                    <span class="news-author">By ${article.user?.name || 'Unknown author'}</span>
-                    <span class="news-date">${publishDate}</span>
-                </div>
-            </div>
-        </div>
+    button.disabled = true;
 
-        `;
-    }).join('');
+    try {
+        const questions = await getPosts();
+        const question = questions.find(q => q.id === questionId);
+
+        if (question) {
+            question.votes += 1; // Increment the vote count
+            await updatePost(questionId, { votes: question.votes }); // Update the question on the server
+            await fetchAndDisplayQuestions(); // Refresh the questions list
+        }
+    } catch (error) {
+        console.error("Failed to like the question:", error);
+        alert("Failed to like the question. Please try again.");
+    } finally {
+        button.disabled = false;
+    }
 }
 
 // Fetch and Display Questions
-async function fetchQuestions() {
+async function fetchAndDisplayQuestions() {
     if (!postList) return;
 
     try {
         const questions = await getPosts();
-        displayPosts(questions);
+        postList.innerHTML = questions.map(question => `
+            <div class="post-item question">
+                <h3>${question.question}</h3>
+                <p>${question.description}</p>
+                <p><strong>Tags:</strong> ${question.tags?.join(", ") || "No tags"}</p>
+                <p><strong>User:</strong> ${question.user}</p>
+                <p><strong>Votes:</strong> ${question.votes}</p>
+                <button class="vote-btn like" data-id="${question.id}">Like</button>
+                <div class="comments-section">
+                    <h4>Comments (${question.comments?.length || 0})</h4>
+                    <ul class="comments-list">
+                        ${question.comments?.map(comment => `
+                            <li class="comment-item">
+                                <p>${comment.text}</p>
+                                <small>By ${comment.user || "Anonymous"} on ${new Date(comment.timestamp).toLocaleString()}</small>
+                            </li>
+                        `).join("") || "<li>No comments yet</li>"}
+                    </ul>
+                    <textarea class="comment-input" placeholder="Write your comment..."></textarea>
+                    <button class="comment-btn" data-id="${question.id}">Post Comment</button>
+                </div>
+            </div>
+        `).join("");
+
+        // Add event listeners for Like buttons
+        document.querySelectorAll(".vote-btn.like").forEach(button => {
+            button.addEventListener("click", handleLike);
+        });
+
+        // Add event listeners for Comment buttons
+        document.querySelectorAll(".comment-btn").forEach(button => {
+            button.addEventListener("click", handleComment);
+        });
     } catch (error) {
         console.error("Error fetching questions:", error);
-        if (postList) {
-            postList.innerHTML = `<p class="error">Failed to load questions. Please try again later.</p>`;
-        }
+        postList.innerHTML = `<p class="error">Failed to load questions. Please try again later.</p>`;
     }
 }
 
-function displayPosts(questions) {
-    if (!postList) return;
-
-    postList.innerHTML = "";
-    questions.forEach((question) => {
-        const postItem = document.createElement("div");
-        postItem.classList.add("post-item", "question");
-        postItem.innerHTML = `
-            <h3>${question.question}</h3>
-            <p>${question.description}</p>
-            <p><strong>Tags:</strong> ${Array.isArray(question.tags) ? question.tags.join(", ") : "No tags"}</p>
-            <p><strong>User:</strong> ${question.user}</p>
-            <p><strong>Votes:</strong> ${question.votes}</p>
-            <button class="vote-btn like" data-id="${question.id}">Like</button>
-            <button class="vote-btn dislike" data-id="${question.id}">Dislike</button>
-            <div class="comments-section">
-                <h4>Comments:</h4>
-                <ul class="comments-list">
-                    ${question.comments?.map(comment => `<li>${comment}</li>`).join("") || ""}
-                </ul>
-                <input type="text" class="comment-input" placeholder="Add a comment..." />
-                <button class="comment-btn" data-id="${question.id}">Comment</button>
-            </div>
-        `;
-        postList.appendChild(postItem);
-    });
-
-    // Add event listeners for comment buttons
-    document.querySelectorAll(".comment-btn").forEach(button => {
-        button.addEventListener("click", handleComment);
-    });
-}
-
-// Handle Commenting
+// Handle Comment Submission
 async function handleComment(event) {
-    const questionId = event.target.dataset.id;
-    const commentInput = event.target.previousElementSibling;
+    const button = event.target;
+    const questionId = button.dataset.id;
+    const commentInput = button.previousElementSibling;
     const commentText = commentInput.value.trim();
 
     if (!commentText) {
-        alert("Please enter a comment.");
+        alert("Please enter a comment before submitting.");
         return;
     }
 
-    try {
-        const questions = await getPosts();
-        const question = questions.find(q => q.id == questionId);
-        question.comments = question.comments || [];
-        question.comments.push(commentText);
+    button.disabled = true;
+    button.textContent = "Posting...";
 
-        await updatePost(question);
-        fetchQuestions(); // Refresh the list
+    try {
+        await updatePost(questionId, commentText);
+        commentInput.value = "";
+        await fetchAndDisplayQuestions();
     } catch (error) {
-        console.error("Error adding comment:", error);
+        console.error("Failed to post comment:", error);
+        alert("Failed to post comment. Please try again.");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Post Comment";
     }
 }
 
 // Add New Question
-async function addQuestion(title, description, tags) { 
-    const newQuestion = {
-        question: title,
-        description: description,
-        tags: tags, 
-        user: "Anonymous",
-        votes: 0,
-        comments: []
-    };
+async function addQuestion(title, description, tags) {
+    const newQuestion = { question: title, description, tags, user: "Anonymous", votes: 0, comments: [] };
+
     try {
         await createPost(newQuestion);
-        fetchQuestions(); // Refresh the list
+        await fetchAndDisplayQuestions();
     } catch (error) {
         console.error("Error adding question:", error);
     }
@@ -201,34 +196,63 @@ async function addQuestion(title, description, tags) {
 // Handle Form Submission
 function handleFormSubmit(event) {
     event.preventDefault();
+
     const title = document.getElementById("question-title").value.trim();
     const description = document.getElementById("question-details").value.trim();
-    const tagsSelect = document.getElementById("question-tags");
-    const tags = Array.from(tagsSelect.selectedOptions).map(option => option.value);
+    const tags = Array.from(document.getElementById("question-tags").selectedOptions).map(option => option.value);
 
     if (!title || !description || tags.length === 0) {
         alert("Please fill out all fields and select at least one tag.");
         return;
     }
 
-    addQuestion(title, description, tags); // Pass `tags` here
+    addQuestion(title, description, tags);
     questionForm.reset();
 }
 
+// Search Questions
+function setupSearch() {
+    const searchBox = document.getElementById("search-box");
+
+    if (!searchBox) return;
+
+    searchBox.addEventListener("input", (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+
+        // Filter questions based on the search term
+        const questions = document.querySelectorAll(".post-item.question");
+        questions.forEach((question) => {
+            const title = question.querySelector("h3").textContent.toLowerCase();
+            const description = question.querySelector("p").textContent.toLowerCase();
+
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                question.style.display = "block"; // Show matching questions
+            } else {
+                question.style.display = "none"; // Hide non-matching questions
+            }
+        });
+    });
+}
+
+// Initialize App
 function initializeApp() {
-    // Only run these if the elements exist on the page
+    setupThemeToggle();
+    setupCarousel();
+
     if (questionForm) {
         questionForm.addEventListener("submit", handleFormSubmit);
-        fetchQuestions();
+        fetchAndDisplayQuestions();
     }
 
     if (newsContainer) {
-        fetchTechNews();
+        fetchAndDisplayTechNews();
     }
 
     if (refreshBtn) {
-        refreshBtn.addEventListener('click', fetchTechNews);
+        refreshBtn.addEventListener("click", fetchAndDisplayTechNews);
     }
+
+    setupSearch(); // Initialize the search functionality
 }
 
 initializeApp();
