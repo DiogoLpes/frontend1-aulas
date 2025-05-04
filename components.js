@@ -24,7 +24,7 @@ class SharedHeader extends HTMLElement {
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="Tags.html" class="nav-link">Tags</a>
                 <a href="contacts.html" class="nav-link">Contacts</a>   
-                <button id="theme-toggle">Dark Mode</button>
+                <button id="theme-toggle" class="theme-toggle">Dark Mode</button>
             </nav>
         </div>
     </header>

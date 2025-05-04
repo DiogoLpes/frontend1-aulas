@@ -123,6 +123,7 @@ body.dark-mode .comment-btn:hover {
     font-weight: bold;
 }
 
+/* Dark Mode Button */
 .theme-toggle {
     background-color: #007bff;
     color: white;

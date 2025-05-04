@@ -65,3 +65,23 @@ export const deletePost = async (id) => {
   const data = await response.json();
   return data;
 }
+
+export const saveToLocalStorage = (key, obj) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(obj));
+    return true;
+  } catch (error) {
+    console.error("Erro ao salvar no localStorage:", error);
+    return false;
+  }
+};
+
+export const loadFromLocalStorage = (key) => {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error("Erro ao carregar do localStorage:", error);
+    return null;
+  }
+};
