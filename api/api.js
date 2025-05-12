@@ -14,56 +14,71 @@ async function fetchLocalQuestions() {
 
 export const getPosts = async () => {
   try {
-    const [apiQuestions, localQuestions] = await Promise.all([
-      fetch(apiURL + "question").then(res => res.json()).catch(() => []),
-      fetchLocalQuestions()
-    ]);
-    
-    const combinedQuestions = [
-      ...apiQuestions.map(q => ({ ...q, source: 'api' })),
-      ...localQuestions.map(q => ({ ...q, source: 'local' }))
-    ];
-    
-    return combinedQuestions;
+    const response = await fetch(apiURL + "question");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
-    console.error("Error fetching questions:", error);
-    return fetchLocalQuestions();
+    console.error("Error fetching posts:", error);
+    throw error;
   }
 }
 
 export const createPost = async (question) => {
-  const response = await fetch(apiURL + "question", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(question),
-  });
-  const data = await response.json();
-  return data;
-}
-
-export const updatePost = async (postId, updatedFields) => {
   try {
-    const response = await fetch(`${apiURL}question/${postId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedFields),
+    const response = await fetch(apiURL + "question", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(question),
     });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+} 
 
+export const updatePost = async (id, updatedPost) => {
+  try {
+    const response = await fetch(apiURL + "question/" + id, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify(updatedPost)
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, ${errorText}`);
+    }
+    
     return await response.json();
   } catch (error) {
     console.error("Error updating post:", error);
     throw error;
   }
-};
+}
 
 export const deletePost = async (id) => {
-  const response = await fetch(apiURL + "question/" + id, {
-    method: "DELETE",
-  });
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(apiURL + "question/" + id, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    throw error;
+  }
 }
 
 export const saveToLocalStorage = (key, obj) => {
